@@ -1,33 +1,86 @@
-// Hardcoded values for the season and plant type
-let season = "summer"; // TODO: Replace with prompt() to allow user interaction.
-let plantType = "flower"; // TODO: Replace with prompt() to allow user interaction.
+class main {
+    constructor() {
+        this.advice = "";
+        this.adviceDict = {};  // JavaScript object acting as dictionary
+    }
 
-// Variable to hold gardening advice
-let advice = "";
+    // Collecting user input with validation
+    dataCollection() {
+        let season = prompt("Enter the season, summer or winter:").trim().toLowerCase();
 
-// Determine advice based on the season
-if (season === "summer") {
-    advice += "Water your plants regularly and provide some shade.\n";
-} else if (season === "winter") {
-    advice += "Protect your plants from frost with covers.\n";
-} else {
-    advice += "No advice for this season.\n";
+        if (season !== "summer" && season !== "winter") {
+            alert("Error: Invalid season. Please enter 'summer' or 'winter'.");
+            return null; // Stop execution
+        }
+
+        let plantType = prompt("Enter the type of plant, flower or vegetable:").trim().toLowerCase();
+
+        if (plantType !== "flower" && plantType !== "vegetable") {
+            alert("Error: Invalid plant type. Please enter 'flower' or 'vegetable'.");
+            return null;
+        }
+
+        return { season, plantType };
+    }
+
+    // Generate advice based on inputs
+    generateAdvice(season, plantType) {
+        this.advice = "";  // Reset advice
+
+        if (season === "summer") {
+            this.advice += "Water your plants regularly and provide some shade.\n";
+        } else if (season === "winter") {
+            this.advice += "Protect your plants from frost with covers.\n";
+        } else {
+            this.advice += "No advice for this season.\n";
+        }
+
+        if (plantType === "flower") {
+            this.advice += "Use fertiliser to encourage blooms.";
+        } else if (plantType === "vegetable") {
+            this.advice += "Keep an eye out for pests!";
+        } else {
+            this.advice += "No advice for this type of plant.";
+        }
+
+        return this.advice;
+    }
+
+    // Store advice in dictionary/object
+    storeAdvice(season, plantType, advice) {
+        const key = `${season}_${plantType}`;
+        this.adviceDict[key] = advice;
+    }
+
+    // Show all stored advice
+    showAllAdvice() {
+        if (Object.keys(this.adviceDict).length === 0) {
+            console.log("No advice stored yet.");
+            return;
+        }
+
+        console.log("\n=== All Stored Advice ===");
+        for (const [key, adv] of Object.entries(this.adviceDict)) {
+            const displayKey = key.replace("_", " - ");
+            console.log(`${displayKey}:`);
+            console.log(`   ${adv}`);
+            console.log("-".repeat(40));
+        }
+    }
 }
 
-// Determine advice based on the plant type
-if (plantType === "flower") {
-    advice += "Use fertiliser to encourage blooms.";
-} else if (plantType === "vegetable") {
-    advice += "Keep an eye out for pests!";
-} else {
-    advice += "No advice for this type of plant.";
+//  Run the program 
+const advisor = new main();
+
+const result = advisor.dataCollection();
+
+if (result) {
+    const { season, plantType } = result;
+    
+    const advice = advisor.generateAdvice(season, plantType);
+    
+    advisor.storeAdvice(season, plantType, advice);
+    
+    console.log(advice);           // Print current advice
+    advisor.showAllAdvice();       // Show all stored advice
 }
-
-// Log the generated advice to the console
-console.log(advice);
-
-// TODO: Examples of possible features to add:
-// - Add detailed comments explaining each block of code.
-// - Refactor the code into functions for better readability and modularity.
-// - Store advice in an object for multiple plants and seasons.
-// - Suggest plants that thrive in the given season.
