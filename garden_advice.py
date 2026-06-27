@@ -1,31 +1,77 @@
-# Hardcoded values for the season and plant type
-season = "summer"  # TODO: Replace with input() to allow user interaction.
-plant_type = "flower"  # TODO: Replace with input() to allow user interaction.
+class main:
+    # class instance variable
+    def __init__(self):
+        self.advice = ""
+        self.advice_dict = {}
+    # Collecting user input
 
-# Variable to hold gardening advice
-advice = ""
+    def data_collection(self):
+        try:
+            season = input(
+                "Enter the season, summer or winter: ").strip().lower()
+            # Validating user input
+            if season not in ["summer", "winter"]:
+                raise ValueError(
+                    "Invalid season. Please enter 'summer' or 'winter'.")
+        # Just in case something goes wrong
+        except ValueError as e:
+            print(f"Error: {e}")
+            exit(1)
 
-# Determine advice based on the season
-if season == "summer":
-    advice += "Water your plants regularly and provide some shade.\n"
-elif season == "winter":
-    advice += "Protect your plants from frost with covers.\n"
-else:
-    advice += "No advice for this season.\n"
+        try:
+            plant_type = input(
+                "Enter the type of plant, flower or vegetable: ").strip().lower()
 
-# Determine advice based on the plant type
-if plant_type == "flower":
-    advice += "Use fertiliser to encourage blooms."
-elif plant_type == "vegetable":
-    advice += "Keep an eye out for pests!"
-else:
-    advice += "No advice for this type of plant."
+            if plant_type not in ["flower", "vegetable"]:
+                raise ValueError(
+                    "Invalid plant type. Please enter 'flower' or 'vegetable'.")
 
-# Print the generated advice
-print(advice)
+        except ValueError as e:
+            print(f"Error: {e}")
+            exit(1)
+        # Make sure to return the values
+        return season, plant_type
+    # Adding strings to advice based on user input
 
-# TODO: Examples of possible features to add:
-# - Add detailed comments explaining each block of code.
-# - Refactor the code into functions for better readability and modularity.
-# - Store advice in a dictionary for multiple plants and seasons.
-# - Recommend plants based on the entered season.
+    def generate_advice(self, season, plant_type):
+        if season == "summer":
+            self.advice += "Water your plants regularly and provide some shade.\n"
+        elif season == "winter":
+            self.advice += "Protect your plants from frost with covers.\n"
+        else:
+            self.advice += "No advice for this season.\n"
+
+        if plant_type == "flower":
+            self.advice += "Use fertiliser to encourage blooms."
+        elif plant_type == "vegetable":
+            self.advice += "Keep an eye out for pests!"
+        else:
+            self.advice += "No advice for this type of plant."
+        # Make sure to return the advice
+        return self.advice
+    # Creating a dict key using season and plant type, and storing the advice
+
+    def store_advice(self, season, plant_type, advice):
+        key = f"{season}_{plant_type}"
+        self.advice_dict[key] = advice
+    # Printing all stored advice
+
+    def show_all_advice(self):
+        if not self.advice_dict:
+            print("No advice stored yet.")
+            return
+        print("\n=== All Stored Advice ===")
+        for key, adv in self.advice_dict.items():
+            print(f"{key.replace('_', ' - ')}:")
+            print(f"   {adv}")
+            print("-" * 40)
+
+
+# Starting the program and calling the functions
+if __name__ == "__main__":
+    main = main()
+    season, plant_type = main.data_collection()
+    advice = main.generate_advice(season, plant_type)
+    main.store_advice(season, plant_type, advice)
+    print(advice)
+    main.show_all_advice()
